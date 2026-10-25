@@ -184,3 +184,27 @@
     font-size: 12.5px;
   }
 }
+
+/* On phones the bar keeps just the wordmark and the buttons; round and trump drop to a line below. */
+@media (max-width: 640px) {
+  .top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "logo tools"
+      "meta meta";
+    row-gap: 8px;
+  }
+  .logo {
+    grid-area: logo;
+  }
+  .tools {
+    grid-area: tools;
+  }
+  .meta {
+    grid-area: meta;
+  }
+  .notice {
+    top: calc(env(safe-area-inset-top) + 140px);
+  }
+}

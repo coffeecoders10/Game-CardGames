@@ -29,7 +29,10 @@ export function GameHome({ slug, name: gameName, emblem, tagline, fan, storage }
   const router = useRouter();
   const stored = useClientValue(storage.loadName, "");
   const [typed, setTyped] = useState<string | null>(null);
-  const [joinCode, setJoinCode] = useState("");
+  // An invite link (`/games/<slug>?code=ABC123`) arrives with the table code already filled in.
+  const invited = useClientValue(() => normalizeRoomCode(new URLSearchParams(location.search).get("code") ?? ""), "");
+  const [typedCode, setTypedCode] = useState<string | null>(null);
+  const joinCode = typedCode ?? invited;
   const name = typed ?? stored;
   const ready = name.trim().length > 0;
 
@@ -71,7 +74,7 @@ export function GameHome({ slug, name: gameName, emblem, tagline, fan, storage }
             hideLabel
             variant="code"
             value={joinCode}
-            onChange={(e) => setJoinCode(normalizeRoomCode(e.target.value))}
+            onChange={(e) => setTypedCode(normalizeRoomCode(e.target.value))}
             placeholder="CODE"
             inputMode="text"
             autoCapitalize="characters"

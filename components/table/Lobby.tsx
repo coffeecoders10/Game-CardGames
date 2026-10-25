@@ -7,7 +7,7 @@ import styles from "./Lobby.module.css";
 
 interface Props {
   view: { code: string; seats: { name: string | null; connected: boolean }[] };
-  /** Route segment of the game, for the invite link: `/games/<slug>/room/<code>`. */
+  /** Route segment of the game, for the invite link: `/games/<slug>?code=<code>`. */
   slug: string;
   /** Game name, for the share sheet. */
   title: string;
@@ -21,7 +21,7 @@ interface Props {
 /** Waiting room shown on the felt until every seat is filled. */
 export function Lobby({ view, slug, title, isHost, disabled, minPlayers, onStart }: Props) {
   const [copied, setCopied] = useState(false);
-  const link = useClientValue(() => `${location.origin}/games/${slug}/room/${view.code}`, "");
+  const link = useClientValue(() => `${location.origin}${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/games/${slug}?code=${view.code}`, "");
   const canShare = useClientValue(() => typeof navigator.share === "function", false);
   const total = view.seats.length;
   const seated = view.seats.filter((s) => s.name !== null && s.connected).length;

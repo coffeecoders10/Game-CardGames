@@ -20,12 +20,20 @@ const SUIT_ORDER = ["S", "H", "C", "D"];
 const sortForHand = (cards: readonly Card[]) =>
   cards.slice().sort((a, b) => SUIT_ORDER.indexOf(a.suit) - SUIT_ORDER.indexOf(b.suit) || valueOf(a) - valueOf(b));
 
-/** The player's whole hand, laid out flat with no overlap so every card can be read and planned around. */
+/** The player's hand, grouped by suit and fanned like a hand held at the table. */
 export function Hand({ cards, choosable, selected, onChoose }: Props) {
   const sorted = useMemo(() => sortForHand(cards), [cards]);
+  // The fewer the cards, the wider each steps apart; 18 cards stay within about 60 degrees.
+  const angle = Math.min(6, 60 / Math.max(sorted.length, 1));
 
   return (
-    <div className={styles.hand} role="group" aria-label="Your hand" data-turn={choosable !== null}>
+    <div
+      className={styles.hand}
+      role="group"
+      aria-label="Your hand"
+      data-turn={choosable !== null}
+      style={{ "--n": sorted.length, "--angle": `${angle}deg` } as CSSProperties}
+    >
       {sorted.map((card, k) => {
         const key = cardKey(card);
         const pickable = choosable?.has(key) ?? false;
@@ -34,7 +42,7 @@ export function Hand({ cards, choosable, selected, onChoose }: Props) {
             key={key}
             card={card}
             className={`${styles.card} ${selected === key ? styles.lift : ""} ${pickable ? styles.can : ""}`}
-            style={{ "--k": k } as CSSProperties}
+            style={{ "--k": k, "--d": k - (sorted.length - 1) / 2 } as CSSProperties}
             disabled={choosable !== null && !pickable}
             selected={selected === key}
             dataKey={key}

@@ -1,12 +1,17 @@
 /* A fan: cards overlap by ~42% of their width, turn a little more each step from the middle and drop on a curve. */
 .hand {
   /* Sized so the whole fan always fits the screen, however many cards are held. */
-  --cw: clamp(30px, min(calc(94vw / (1 + (var(--n) - 1) * 0.58)), calc(760px / (1 + (var(--n) - 1) * 0.58)), 10dvh), 84px);
+  /* The extra 1.1 card widths leave room for the outer cards swinging out as they turn. */
+  --span: calc(1.1 + 1 + (var(--n) - 1) * 0.58);
+  --cw: clamp(24px, min(calc((100vw - 24px) / var(--span)), calc(760px / var(--span)), 10dvh), 84px);
   position: relative;
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;
-  padding: 20px 10px 14px;
+  max-width: 100%;
+  /* The bottom padding covers how far the outer cards drop and swing down, so none are cut off. */
+  padding: 20px 12px calc(10px + var(--cw) * (0.25 + 0.00225 * (var(--n) - 1) * (var(--n) - 1)));
+  box-sizing: border-box;
 }
 
 .card {
