@@ -40,9 +40,9 @@ Full 52-card deck dealt out evenly to 3–5 players, over seven rounds.
 
 ## How Judgement plays
 
-Three to six players, as many rounds as you like. The deck is trimmed so everyone gets the same number of cards: all 2s out for 3 and 6 players, the 2 of clubs and 2 of diamonds out for 5, nothing out for 4 (16, 13, 10 and 8 cards each).
+Three to six players, as many rounds as you like. The full 52-card deck is shuffled and dealt evenly; leftover cards stay face down for the round. The first round deals 17, 13, 10 or 8 cards each (3, 4, 5 or 6 players), then each round deals one fewer down to 1, then one more back up to the first round's size, repeating.
 
-1. A random trump suit is drawn every round. Starting with that round's starter, each player **calls** how many hands they will win, from 0 to the cards in their hand. Calls are public and final. The last player to call can't pick the number that makes the calls add up to the hands available, so somebody always misses.
+1. Trump is Spades in round 1, then Hearts, Clubs, Diamonds, and round again. Starting with that round's starter, each player **calls** how many hands they will win, from 0 to the cards in their hand. Calls are public and final. The last player to call can't pick the number that makes the calls add up to the hands available, so somebody always misses.
 2. The starter leads the first hand and play goes clockwise. Follow the led suit if you can; otherwise play anything. Highest trump wins, else highest card of the led suit. The winner leads next.
 3. Win exactly your call and you score that number; win more or fewer and you score nothing (a call of 0 is worth 0).
 4. The starting seat moves one place clockwise each round. After any round the host can end the game; the highest total wins and a tie is shared.

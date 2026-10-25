@@ -1,7 +1,7 @@
 import { type Card, type RandomInt, SUITS, type Suit, sameCard, shuffle } from "@/lib/cards/cards";
 import { fail } from "@/lib/cards/rules";
 import { type TrickPlay, followCards, trickWinnerSeat } from "@/lib/cards/tricks";
-import { buildDeck } from "./deck";
+import { buildDeck, handSizeFor, trumpFor } from "./deck";
 
 /**
  * Authoritative Judgement rules. Everything here is pure: each action takes a Game and returns a
@@ -78,15 +78,15 @@ export function leaders(scores: readonly number[]): number[] {
 // ------------------------------------------------------------------- set-up
 
 function dealRound(round: number, players: number, scores: number[], history: RoundRecord[], randomInt: RandomInt): Game {
-  const deck = shuffle(buildDeck(players), randomInt);
-  const handSize = deck.length / players;
+  const deck = shuffle(buildDeck(), randomInt);
+  const handSize = handSizeFor(round, players);
   const starter = (round - 1) % players;
   return {
     round,
     players,
     handSize,
     hands: Array.from({ length: players }, (_, seat) => deck.slice(seat * handSize, (seat + 1) * handSize)),
-    trump: SUITS[randomInt(SUITS.length)],
+    trump: trumpFor(round),
     starter,
     judgements: Array(players).fill(null),
     turn: starter,

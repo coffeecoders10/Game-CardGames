@@ -7,12 +7,14 @@ export function RulesJudgement() {
         called. The highest total when the host ends the game wins.
       </li>
       <li>
-        <strong>The deal.</strong> Every player gets the same number of cards: 16 with three players, 13 with four, 10
-        with five and 8 with six. The deck is trimmed to fit by taking out the 2s. Ace is high.
+        <strong>The deal.</strong> The full 52-card deck is shuffled and everyone gets the same number of cards; any left
+        over stay face down and sit out the round. The first round deals as many as fit (17 with three players, 13 with
+        four, 10 with five and 8 with six). Each round after deals one card fewer, down to 1, then one more each round
+        back up to the first round&apos;s size, and the cycle repeats. Ace is high.
       </li>
       <li>
-        <strong>Trump.</strong> A random suit is trump for the round, and a new one is drawn each round. Any trump
-        beats every card of another suit.
+        <strong>Trump.</strong> Trump is Spades in round 1, then Hearts, Clubs and Diamonds, then back to Spades,
+        and so on. Any trump beats every card of another suit.
       </li>
       <li>
         <strong>Judgement.</strong> Before any card is played, each player in turn calls how many hands they will win,

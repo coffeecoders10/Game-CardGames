@@ -1,22 +1,29 @@
 import { type Card, type Rank, SUITS, type Suit } from "@/lib/cards/cards";
 
-/**
- * The deck for a given number of players, trimmed so everyone is dealt the same number of cards:
- * 3 and 6 players lose all four 2s, 5 players lose the 2 of Clubs and the 2 of Diamonds, 4 keep all 52.
- * Ace is stored as rank 14.
- */
-export function buildDeck(players: number): Card[] {
+/** Trump goes round in this order, starting with Spades in round 1. */
+const TRUMP_ORDER: readonly Suit[] = ["S", "H", "C", "D"];
+
+export const trumpFor = (round: number): Suit => TRUMP_ORDER[(round - 1) % TRUMP_ORDER.length];
+
+/** The full 52-card deck. Ace is stored as rank 14. */
+export function buildDeck(): Card[] {
   const deck: Card[] = [];
   for (const suit of SUITS) {
-    for (let rank = 2; rank <= 14; rank++) {
-      if (rank === 2 && dropsTwo(players, suit)) continue;
-      deck.push({ suit, rank: rank as Rank });
-    }
+    for (let rank = 2; rank <= 14; rank++) deck.push({ suit, rank: rank as Rank });
   }
   return deck;
 }
 
-function dropsTwo(players: number, suit: Suit) {
-  if (players === 3 || players === 6) return true;
-  return players === 5 && (suit === "C" || suit === "D");
+/** Cards each player gets in the first round: as many as the whole deck deals out evenly. */
+export const openingHandSize = (players: number) => Math.floor(buildDeck().length / players);
+
+/**
+ * Cards each player is dealt in a round. The first round deals X, then X-1, X-2 down to 1, then 2, 3 back up
+ * to X, and the cycle repeats.
+ */
+export function handSizeFor(round: number, players: number): number {
+  const top = openingHandSize(players);
+  const period = 2 * (top - 1);
+  const t = (round - 1) % period;
+  return t < top ? top - t : t - top + 2;
 }
