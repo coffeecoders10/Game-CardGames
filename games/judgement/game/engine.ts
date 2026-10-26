@@ -7,7 +7,7 @@ import { buildDeck, handSizeFor, trumpFor } from "./deck";
  * Authoritative Judgement rules. Everything here is pure: each action takes a Game and returns a
  * new Game, or throws a RuleError. Three to six seats play clockwise (ascending seat order). Each
  * round every player says how many hands they will win (their judgement), then the hands are played;
- * a player scores their judgement if they won exactly that many, and nothing otherwise. The last player
+ * a player scores 10 plus their judgement if they won exactly that many, and nothing otherwise. The last player
  * to judge may not call the number that makes the calls add up to the hands available, so someone always
  * misses. Rounds go on until the host ends the game.
  */
@@ -55,8 +55,8 @@ export interface Game {
 
 const nextSeat = (g: Pick<Game, "players">, seat: number) => (seat + 1) % g.players;
 
-/** Points for a round: a player's judgement if they won exactly that many hands, otherwise nothing. */
-export const pointsFor = (judgement: number, won: number) => (judgement === won ? judgement : 0);
+/** Points for a round: 10 plus the judgement if they won exactly that many hands, otherwise nothing. */
+export const pointsFor = (judgement: number, won: number) => (judgement === won ? 10 + judgement : 0);
 
 /**
  * The one number the player judging now may not call: the one that would make every call add up to the

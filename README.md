@@ -44,7 +44,7 @@ Three to six players, as many rounds as you like. The full 52-card deck is shuff
 
 1. Trump is Spades in round 1, then Hearts, Clubs, Diamonds, and round again. Starting with that round's starter, each player **calls** how many hands they will win, from 0 to the cards in their hand. Calls are public and final. The last player to call can't pick the number that makes the calls add up to the hands available, so somebody always misses.
 2. The starter leads the first hand and play goes clockwise. Follow the led suit if you can; otherwise play anything. Highest trump wins, else highest card of the led suit. The winner leads next.
-3. Win exactly your call and you score that number; win more or fewer and you score nothing (a call of 0 is worth 0).
+3. Win exactly your call and you score 10 plus that number (a call of 0 is worth 10); win more or fewer and you score nothing.
 4. The starting seat moves one place clockwise each round. After any round the host can end the game; the highest total wins and a tie is shared.
 
 ## Code layout

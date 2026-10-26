@@ -30,8 +30,8 @@ export function RulesJudgement() {
         leads the next hand.
       </li>
       <li>
-        <strong>Scoring.</strong> Win exactly the number you called and you score that number. Win fewer or more and you
-        score nothing. Calling 0 and winning none scores nothing too.
+        <strong>Scoring.</strong> Win exactly the number you called and you score 10 plus that number (call 1 and win 1
+        for 11, call 0 and win none for 10). Win fewer or more and you score nothing.
       </li>
       <li>
         <strong>Ending.</strong> After any round the host can end the game. The highest total wins, and a tie is shared.
