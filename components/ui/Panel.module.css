@@ -1,5 +1,8 @@
 .panel {
   display: grid;
+  /* Shrink to content: the landing grid would otherwise stretch the panel and spread its rows apart. */
+  align-self: center;
+  align-content: start;
   gap: 10px;
   width: min(100%, 380px);
   padding: 24px 22px 22px;
