@@ -1,0 +1,63 @@
+/* The discard pile sits in the middle of the felt. Pairs overlap, each turned a little differently. */
+.pile {
+  --cw: clamp(28px, 7.5dvh, 46px);
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: calc(var(--cw) * 3.4);
+  height: calc(var(--cw) * 1.9);
+}
+
+.empty {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 1.5px dashed rgba(226, 176, 114, 0.4);
+  border-radius: calc(var(--cw) * 0.3);
+  color: var(--text-dim);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+
+.pair {
+  position: absolute;
+  display: flex;
+  rotate: var(--turn);
+  translate: var(--dx) var(--dy);
+}
+
+.card + .card {
+  margin-left: calc(var(--cw) * -0.55);
+}
+
+/* The newest pair is thrown in from the side of whoever played it: below for you, above for the rest. */
+.pair[data-fresh="true"] {
+  z-index: 2;
+  animation: toss 0.55s var(--ease-spring) backwards;
+}
+
+@keyframes toss {
+  from {
+    translate: calc(var(--dx) * 2) calc(var(--from) * 38dvh);
+    rotate: calc(var(--turn) + 50deg);
+    scale: 1.3;
+    opacity: 0;
+  }
+}
+
+.count {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--cw) * -0.2);
+  z-index: 3;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--panel-line);
+  color: var(--text-dim);
+  font-size: 11.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}

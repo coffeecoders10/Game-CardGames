@@ -8,7 +8,7 @@ Source of truth for values is [app/globals.css](app/globals.css) (tokens) and [a
 
 ## 1. Product
 
-**What it is.** A hub of playing-card games, played online with friends: 5-3-2, 7-8, 7 of Hearts and Judgement so far. Pick a game, open a table, share a six-character code (or link), play.
+**What it is.** A hub of playing-card games, played online with friends: 5-3-2, 7-8, 7 of Hearts, Judgement and Steal the Jack so far. Pick a game, open a table, share a six-character code (or link), play.
 
 **Who it's for.** Small groups of friends, mostly on phones, often in the same room or on a call. Sessions are casual and social.
 
@@ -239,6 +239,8 @@ Tables share the surface, cards and header, but arrange players to suit the game
 | 7-8 | 2 | Opponent across the top; both players' table cards in the middle |
 | 7 of Hearts | 3-5 | Opponents as compact `Seat`s in a row above the board, clockwise; four suit runs as vertical columns; your hand is never overlapped and wraps onto extra rows |
 | Judgement | 3-6 | Opponents spread on an ellipse around the middle (`ring.ts` gives each seat a direction from the centre); each played card rests and is tossed towards its player; trump badge top left, scores top right, your call panel and fanned hand along the bottom. Uses its own `Plate` (name, called / won, card count, "Starts"/"Leads" tag) because a 16-hand tally doesn't fit `Seat` |
+
+| Steal the Jack | 2-6 | Opponents as compact `Seat`s in a row (dimmed with `isOut` once their hand is empty); a face-up discard pile in the middle; when it's your pick, the other player's backs appear above the pile as seen from across the table (their order reversed); your cards in a straight, draggable line (two rows past 13 cards) with Discard pair / Done / Shuffle above |
 
 `Plate` and the ring layout are Judgement-specific for now; promote them to `components/table/` when a second game needs a seats-around-the-table layout.
 

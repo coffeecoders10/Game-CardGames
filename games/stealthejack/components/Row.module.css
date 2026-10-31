@@ -1,0 +1,98 @@
+/*
+ * A hand laid out in a straight line, the way cards sit on a table in front of you: each card
+ * overlaps the last, and a long hand wraps onto a second row (`--per` cards to a row). Used for both
+ * your own cards and the face-down lineup you pick from, so the two always match.
+ */
+.row {
+  --span: calc(1.1 + 1 + (var(--per) - 1) * 0.58);
+  --cw: clamp(20px, min(calc((100vw - 28px) / var(--span)), calc(720px / var(--span)), 9.5dvh), 68px);
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+  /* Exactly wide enough for `--per` overlapped cards, so the next one wraps. */
+  width: calc(var(--cw) * (1 + (var(--per) - 1) * 0.58) + 2px);
+  max-width: 100%;
+  /* Room above for lifted cards; the bottom keeps selected cards' glow from being clipped. */
+  padding: 22px 0 8px;
+  box-sizing: content-box;
+  touch-action: none;
+}
+
+.card {
+  margin-left: calc(min(var(--col), 1) * var(--cw) * -0.42);
+  margin-top: calc(var(--line) * var(--cw) * -0.82);
+  animation: deal 0.6s var(--ease-out) calc(var(--k) * 24ms) backwards;
+}
+
+@keyframes deal {
+  from {
+    translate: 0 -50dvh;
+    rotate: -20deg;
+    scale: 0.6;
+    opacity: 0;
+  }
+}
+
+/* Cards you can act on rise a little under the pointer. */
+@media (hover: hover) {
+  .mine button.card:hover:not(.dragging):not(:disabled) {
+    translate: 0 -10px;
+    z-index: 4;
+  }
+}
+
+.mine button.card.lift,
+.mine button.card.lift:hover {
+  translate: 0 -18px;
+  z-index: 5;
+  box-shadow:
+    0 0 0 calc(var(--u) * 3.2) var(--crema),
+    0 0 calc(var(--u) * 9) calc(var(--u) * 3) rgba(226, 176, 114, 0.6),
+    0 calc(var(--u) * 3) calc(var(--u) * 5) rgba(0, 0, 0, 0.45);
+}
+
+/* The card you picked up with the pointer follows it; nothing eases its position. */
+.row .card.dragging {
+  z-index: 20;
+  scale: 1.07;
+  cursor: grabbing;
+  transition:
+    box-shadow 0.2s var(--ease-out),
+    scale 0.2s var(--ease-out);
+  box-shadow:
+    0 0 0 calc(var(--u) * 1.2) rgba(226, 176, 114, 0.7),
+    0 calc(var(--u) * 6) calc(var(--u) * 9) rgba(0, 0, 0, 0.55);
+}
+
+/* Cards you can drag to reorder. */
+.movable {
+  cursor: grab;
+}
+
+/* Cards in the lineup you pick from lift towards you, so there is room below rather than above. */
+.pick {
+  padding: 8px 0 24px;
+}
+
+.pick button.card {
+  cursor: pointer;
+}
+
+.pick button.card.lift,
+.pick button.card.lift:hover {
+  translate: 0 14px;
+  z-index: 5;
+  box-shadow:
+    0 0 0 calc(var(--u) * 3.2) var(--crema),
+    0 0 calc(var(--u) * 9) calc(var(--u) * 3) rgba(226, 176, 114, 0.6),
+    0 calc(var(--u) * 3) calc(var(--u) * 5) rgba(0, 0, 0, 0.45);
+}
+
+@media (hover: hover) {
+  .pick button.card:hover:not(:disabled):not(.lift) {
+    translate: 0 10px;
+    z-index: 4;
+  }
+}

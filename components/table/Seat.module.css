@@ -43,7 +43,8 @@
 }
 
 .seat[data-away="true"] .plate,
-.seat[data-empty="true"] .plate {
+.seat[data-empty="true"] .plate,
+.seat[data-out="true"] .plate {
   opacity: 0.6;
 }
 

@@ -1,0 +1,33 @@
+.emblem {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--token) * 0.18);
+}
+
+.emblem > *:nth-child(1) {
+  rotate: -6deg;
+}
+.emblem > *:nth-child(2) {
+  rotate: 4deg;
+  translate: 0 calc(var(--token) * 0.1);
+}
+
+.club {
+  width: 52%;
+  height: 52%;
+}
+
+.animated > * {
+  animation: drop 0.8s var(--ease-spring) backwards;
+}
+.animated > *:nth-child(2) {
+  animation-delay: 0.14s;
+}
+
+@keyframes drop {
+  from {
+    translate: 0 -70px;
+    opacity: 0;
+    scale: 0.8;
+  }
+}

@@ -21,6 +21,8 @@ interface Props {
   compact?: boolean;
   /** Line under the name when there is no target tally. */
   sub?: string;
+  /** Finished for the round (no cards left) and watching: the plate dims. */
+  isOut?: boolean;
 }
 
 function Tally({ target, wins }: { target: number; wins: number }) {
@@ -57,6 +59,7 @@ export function Seat({
   back,
   compact,
   sub,
+  isOut,
 }: Props) {
   const empty = name === null;
   return (
@@ -67,6 +70,7 @@ export function Seat({
       data-away={!empty && !connected}
       data-empty={empty}
       data-winner={isWinner ? "true" : "false"}
+      data-out={isOut ? "true" : "false"}
     >
       <div className={styles.plate}>
         <div className={styles.avatar} aria-hidden="true">

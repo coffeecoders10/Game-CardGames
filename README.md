@@ -1,6 +1,6 @@
 # CC Card Games
 
-A hub of playing-card games for the browser. Currently: **5-3-2**, a three-player trick-taking game, **7-8**, a two-player one, **7 of Hearts**, for three to five, and **Judgement**, for three to six. The shared look and feel, and how to add a game, are in [DESIGN.md](DESIGN.md).
+A hub of playing-card games for the browser. Currently: **5-3-2**, a three-player trick-taking game, **7-8**, a two-player one, **7 of Hearts**, for three to five, **Judgement**, for three to six, and **Steal the Jack**, for two to six. The shared look and feel, and how to add a game, are in [DESIGN.md](DESIGN.md).
 
 Built with Next.js (App Router), plain CSS Modules, and the shared Socket.IO room service described in [docs/sop-socket.md](docs/sop-socket.md).
 
@@ -46,6 +46,15 @@ Three to six players, as many rounds as you like. The full 52-card deck is shuff
 2. The starter leads the first hand and play goes clockwise. Follow the led suit if you can; otherwise play anything. Highest trump wins, else highest card of the led suit. The winner leads next.
 3. Win exactly your call and you score 10 plus that number (a call of 0 is worth 10); win more or fewer and you score nothing.
 4. The starting seat moves one place clockwise each round. After any round the host can end the game; the highest total wins and a tie is shared.
+
+## How Steal the Jack plays
+
+Two to six players, the 52-card deck without the Jack of Diamonds (51 cards, all dealt). Only losses are counted.
+
+1. One player at a time, everyone discards pairs (same rank, any suits) they pick by hand, then taps Done. Missed pairs are not flagged.
+2. Each turn you take one card, blind, from the next player clockwise who still has cards, then discard any pairs and end your turn. You see their cards' backs as if sitting across from them (their order, reversed).
+3. The player being picked from can drag their cards into a new order or shuffle; the host resolves the pick by a random card id, so a rearrangement can never change which card was taken.
+4. Players with no cards are out and skipped. When one player still holds cards they lose the round (+1 loss); another round keeps the tally.
 
 ## Code layout
 

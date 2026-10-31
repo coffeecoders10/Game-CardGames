@@ -4,6 +4,7 @@ import { Emblem532 } from "./532/components/Emblem532";
 import { Emblem78 } from "./78/components/Emblem78";
 import { Emblem7Hearts } from "./7hearts/components/Emblem7Hearts";
 import { EmblemJudgement } from "./judgement/components/EmblemJudgement";
+import { EmblemStealTheJack } from "./stealthejack/components/EmblemStealTheJack";
 
 export interface GameInfo {
   /** Route segment: the game lives at `/games/<slug>`. */
@@ -69,6 +70,18 @@ export const GAMES: GameInfo[] = [
       { suit: "S", rank: 14 },
       { suit: "S", rank: 13 },
       { suit: "H", rank: 12 },
+    ],
+  },
+  {
+    slug: "stealthejack",
+    title: "Steal the Jack",
+    tagline: "Pair off your cards, and don't get stuck with the last Jack.",
+    facts: ["2–6 players", "Online"],
+    emblem: <EmblemStealTheJack size="clamp(52px, 14vw, 68px)" />,
+    cards: [
+      { suit: "S", rank: 11 },
+      { suit: "H", rank: 11 },
+      { suit: "C", rank: 11 },
     ],
   },
 ];
