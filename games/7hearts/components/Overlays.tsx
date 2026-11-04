@@ -1,4 +1,4 @@
-import { type CSSProperties, useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import { ROUNDS, leaders } from "@/games/7hearts/game/engine";
 import type { GameView, TableView } from "@/games/7hearts/game/view";
 import panel from "@/components/table/TablePanel.module.css";
@@ -13,18 +13,32 @@ interface Props {
   game: GameView;
   disabled: boolean;
   onReady(): void;
-  onLeave(): void;
+}
+
+/** Live standings for the scoreboard dialog: running totals, fewest points first. */
+export function ScoreList({ view, game }: { view: TableView; game: GameView }) {
+  const rows = game.scores.map((_, seat) => seat).sort((a, b) => game.scores[a] - game.scores[b] || a - b);
+  const top = game.round > 1 || game.step === "summary" ? leaders(game.scores) : [];
+  return (
+    <ul className={styles.rows} aria-label="Scoreboard">
+      {rows.map((seat, i) => (
+        <li key={seat} className={`${styles.row} ${styles.live}`} data-lead={top.includes(seat)}>
+          <span className={styles.rank}>{i + 1}</span>
+          <span className={styles.who}>
+            <span className={styles.name}>{youOr(view, seat)}</span>
+            <small>{plural(game.handCounts[seat], "card left", "cards left")}</small>
+          </span>
+          <span className={styles.total}>
+            {game.scores[seat]} <small>pts</small>
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 /** End-of-round sheet: who went out, what everyone took, the running totals. After round seven, the result. */
-export function RoundSummary({ view, game, disabled, onReady, onLeave }: Props) {
-  const [confirmLeave, setConfirmLeave] = useState(false);
-  useEffect(() => {
-    if (!confirmLeave) return;
-    const timer = setTimeout(() => setConfirmLeave(false), 3000);
-    return () => clearTimeout(timer);
-  }, [confirmLeave]);
-
+export function RoundSummary({ view, game, disabled, onReady }: Props) {
   const summary = game.summary;
   if (!summary) return null;
 
@@ -74,9 +88,6 @@ export function RoundSummary({ view, game, disabled, onReady, onLeave }: Props) 
 
       <button type="button" className={`${panel.primary} ${styles.next}`} disabled={disabled || iAmReady} onClick={onReady}>
         {iAmReady ? `Waiting for others (${waiting} of ${game.players})` : final ? "Play again" : `Deal round ${game.round + 1}`}
-      </button>
-      <button type="button" className={styles.quit} data-danger={confirmLeave} onClick={() => (confirmLeave ? onLeave() : setConfirmLeave(true))}>
-        {confirmLeave ? "Leave table?" : "Leave table"}
       </button>
     </div>
   );

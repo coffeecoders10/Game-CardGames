@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { type Card, cardKey, cardName } from "@/lib/cards/cards";
 import { useMediaQuery } from "@/lib/hooks/useClientValue";
 import { Lobby } from "@/components/table/Lobby";
@@ -12,7 +12,8 @@ import type { GameView, TableView } from "@/games/7hearts/game/view";
 import type { GameAction } from "@/games/7hearts/net/protocol";
 import { Hand } from "./Hand";
 import { Layout } from "./Layout";
-import { RoundSummary } from "./Overlays";
+import { RulesDialog } from "@/components/ui/RulesDialog";
+import { RoundSummary, ScoreList } from "./Overlays";
 import { Rules7Hearts } from "./Rules7Hearts";
 import styles from "./Table.module.css";
 
@@ -23,6 +24,7 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
   const you = view.you;
   const touch = useMediaQuery("(pointer: coarse)");
   const [selected, setSelected] = useState<string | null>(null);
+  const scoresRef = useRef<HTMLDialogElement>(null);
 
   const live = !!game && !view.paused;
   const playing = live && game.step === "play";
@@ -94,7 +96,7 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
         connected={view.seats[seat]?.connected ?? false}
         isYou={seat === you}
         handCount={g?.handCounts[seat]}
-        sub={g ? `${plural(g.handCounts[seat], "card", "cards")} · ${g.scores[seat]} pts` : undefined}
+        sub={g ? `${plural(g.handCounts[seat], "card", "cards")}` : undefined}
         isTurn={playing && g?.turn === seat}
         isWinner={!!g && g.step === "summary" && g.summary?.winner === seat}
       />
@@ -157,8 +159,19 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
 
         {game && game.step === "summary" && (
           <div className={styles.overlay} data-dim>
-            <RoundSummary view={view} game={game} disabled={busy} onReady={() => act({ type: "ready" })} onLeave={onLeave} />
+            <RoundSummary view={view} game={game} disabled={busy} onReady={() => act({ type: "ready" })} />
           </div>
+        )}
+
+        {game && (
+          <>
+            <button type="button" className={styles.scores} onClick={() => scoresRef.current?.showModal()}>
+              Scores
+            </button>
+            <RulesDialog dialogRef={scoresRef} id="scores-title" title={`Scores · Round ${game.round} of ${ROUNDS}`}>
+              <ScoreList view={view} game={game} />
+            </RulesDialog>
+          </>
         )}
       </main>
 

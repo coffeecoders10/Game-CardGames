@@ -110,19 +110,7 @@
   margin-top: 16px;
 }
 
-.quit {
-  margin-top: 8px;
-  min-height: 44px;
-  padding: 0 16px;
-  border: 0;
-  background: none;
-  color: var(--text-dim);
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.quit[data-danger="true"] {
-  color: var(--warn);
+/* The live scoreboard has no "gained this round" column. */
+.live {
+  grid-template-columns: 30px minmax(0, 1fr) 64px;
 }

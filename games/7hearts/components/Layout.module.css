@@ -53,6 +53,15 @@
   margin-top: 0;
 }
 
+/* A completed suit: all thirteen cards in a tight pile, Ace (last in the DOM) on top. */
+.run[data-complete="true"] > .card {
+  margin-top: calc(var(--cw) * -1.4 + 2px);
+}
+
+.run[data-complete="true"] > :first-child {
+  margin-top: 0;
+}
+
 /* A dashed outline at each open end of a run: the card that suit is waiting for. */
 .next {
   flex: none;

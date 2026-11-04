@@ -42,13 +42,16 @@ export function Layout({ board, fresh, playable }: Props) {
         const run = board[suit];
         const cards: Card[] = [];
         if (run) for (let v = run.low; v <= run.high; v++) cards.push({ suit, rank: rankOf(v) });
+        // A finished suit (A to K) folds into a tight pile with the Ace on top.
+        const complete = !!run && run.low === 1 && run.high === 13;
+        if (complete) cards.reverse();
         const wants = (value: number) => playable.some((c) => sameCard(c, { suit, rank: rankOf(value) }));
         return (
           <div key={suit} className={styles.col} role="group" aria-label={describe(suit, run)} data-red={suit === "H" || suit === "D"}>
             <span className={styles.tag} aria-hidden="true">
               <SuitIcon suit={suit} />
             </span>
-            <div className={styles.run}>
+            <div className={styles.run} data-complete={complete}>
               {!run && <Next suit={suit} value={7} hot={wants(7)} />}
               {run && run.low > 1 && <Next suit={suit} value={run.low - 1} hot={wants(run.low - 1)} />}
               {cards.map((card, i) => (
