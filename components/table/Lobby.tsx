@@ -15,11 +15,15 @@ interface Props {
   disabled: boolean;
   /** Fewest players that can start; defaults to every seat. */
   minPlayers?: number;
+  /** Replaces the status line under the code, e.g. when only certain player counts can start. */
+  note?: string;
+  /** Text of the host's start button; defaults to dealing the cards. */
+  startLabel?: string;
   onStart(): void;
 }
 
 /** Waiting room shown on the felt until every seat is filled. */
-export function Lobby({ view, slug, title, isHost, disabled, minPlayers, onStart }: Props) {
+export function Lobby({ view, slug, title, isHost, disabled, minPlayers, note, startLabel, onStart }: Props) {
   const [copied, setCopied] = useState(false);
   const link = useClientValue(() => `${location.origin}${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/games/${slug}?code=${view.code}`, "");
   const canShare = useClientValue(() => typeof navigator.share === "function", false);
@@ -59,18 +63,19 @@ export function Lobby({ view, slug, title, isHost, disabled, minPlayers, onStart
       </div>
 
       <p className={panel.hint} role="status">
-        {seated < needed
+        {note ??
+          (seated < needed
           ? `${seated} of ${total} players seated. Send the code to ${needed - seated === 1 ? "one more friend" : "more friends"}.`
           : minPlayers !== undefined && seated < total
             ? `${seated} of ${total} seats filled. Deal now, or wait for more friends.`
             : isHost
               ? "Everyone's here."
-              : "Everyone's here. Waiting for the host to deal."}
+              : "Everyone's here. Waiting for the host to deal.")}
       </p>
 
       {isHost && (
         <button type="button" className={`${panel.primary} ${styles.start}`} disabled={disabled || seated < needed} onClick={onStart}>
-          Deal the cards
+          {startLabel ?? "Deal the cards"}
         </button>
       )}
     </div>

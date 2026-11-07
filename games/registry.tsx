@@ -3,6 +3,7 @@ import type { Card } from "@/lib/cards/cards";
 import { Emblem532 } from "./532/components/Emblem532";
 import { Emblem78 } from "./78/components/Emblem78";
 import { Emblem7Hearts } from "./7hearts/components/Emblem7Hearts";
+import { EmblemCoat10s } from "./coat10s/components/EmblemCoat10s";
 import { EmblemJudgement } from "./judgement/components/EmblemJudgement";
 import { EmblemStealTheJack } from "./stealthejack/components/EmblemStealTheJack";
 
@@ -82,6 +83,18 @@ export const GAMES: GameInfo[] = [
       { suit: "S", rank: 11 },
       { suit: "H", rank: 11 },
       { suit: "C", rank: 11 },
+    ],
+  },
+  {
+    slug: "coat10s",
+    title: "Coat of 10s",
+    tagline: "Two teams, one goal: capture all four 10s and win a coat.",
+    facts: ["4 or 6 players", "Teams", "Online"],
+    emblem: <EmblemCoat10s size="clamp(52px, 14vw, 68px)" />,
+    cards: [
+      { suit: "S", rank: 10 },
+      { suit: "H", rank: 10 },
+      { suit: "D", rank: 10 },
     ],
   },
 ];

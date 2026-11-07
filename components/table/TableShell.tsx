@@ -19,6 +19,8 @@ interface Props {
   /** A rejected-move message, shown briefly. */
   notice?: { id: number; message: string } | null;
   onLeave(): void;
+  /** Scoreboard content. When given, a Scores button beside Rules opens it in a modal. */
+  scores?: ReactNode;
   /** The board and the player's cards: the shell is a three-row grid (header, board, hand). */
   children: ReactNode;
 }
@@ -33,8 +35,9 @@ export function TrumpChip({ suit }: { suit: Suit }) {
 }
 
 /** Felt, leather rail and header (wordmark, state, Rules, Leave) shared by every game's table. */
-export function TableShell({ name, logo, meta, rulesTitle, rules, alert, notice, onLeave, children }: Props) {
+export function TableShell({ name, logo, meta, rulesTitle, rules, alert, notice, onLeave, scores, children }: Props) {
   const rulesRef = useRef<HTMLDialogElement>(null);
+  const scoresRef = useRef<HTMLDialogElement>(null);
   const [confirmLeave, setConfirmLeave] = useState(false);
 
   // "Leave" asks again for three seconds instead of opening a modal.
@@ -56,6 +59,11 @@ export function TableShell({ name, logo, meta, rulesTitle, rules, alert, notice,
             <span className={styles.status} role="alert" title={alert} aria-label={alert}>
               <span className={styles.statusDot} aria-hidden="true" />
             </span>
+          )}
+          {scores && (
+            <button type="button" className={styles.tool} onClick={() => scoresRef.current?.showModal()}>
+              Scores
+            </button>
           )}
           <button type="button" className={styles.tool} onClick={() => rulesRef.current?.showModal()}>
             Rules
@@ -79,6 +87,11 @@ export function TableShell({ name, logo, meta, rulesTitle, rules, alert, notice,
         </div>
       )}
 
+      {scores && (
+        <RulesDialog dialogRef={scoresRef} title="Scores" id="scores-title">
+          {scores}
+        </RulesDialog>
+      )}
       <RulesDialog dialogRef={rulesRef} title={rulesTitle}>
         {rules}
       </RulesDialog>

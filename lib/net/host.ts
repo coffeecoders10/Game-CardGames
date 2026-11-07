@@ -26,6 +26,8 @@ export interface HostEngine<G, GV, A extends { type: string }> {
    * deal once this many are seated, and empty seats are dropped for the rest of the game.
    */
   minSeats?: number;
+  /** When set, the game can only be dealt with exactly one of these many players seated. */
+  allowedSeats?: readonly number[];
   /** Shown when the host tries to deal before enough seats are filled. */
   startError: string;
   /** `players` is the number of seats actually filled at the start. */
@@ -330,6 +332,7 @@ export class HostSession<G, GV, A extends { type: string }> {
       if (this.game) throw new RuleError("The game has already started.");
       const seated = this.seats.filter((s) => s.id !== null).length;
       const needed = engine.minSeats ?? this.seats.length;
+      if (engine.allowedSeats && !engine.allowedSeats.includes(seated)) throw new RuleError(engine.startError);
       if (seated < needed || !this.seats.every((s, i) => s.id === null || this.isConnected(i))) {
         throw new RuleError(engine.startError);
       }

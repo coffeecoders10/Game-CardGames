@@ -1,0 +1,165 @@
+/* ---------------------------------------------------------------- board */
+
+/* Players sit round the felt: opponents on an ellipse, you at the bottom with your hand. */
+.board {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  gap: 4px;
+  min-height: 0;
+  margin: 0 8px;
+}
+
+/* Everything that sits on the felt itself (players, the hand on the table) is placed against this box. */
+.felt {
+  grid-row: 1;
+  position: relative;
+  min-height: 0;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.opp {
+  position: absolute;
+  left: calc(50% + var(--x) * 38%);
+  top: calc(50% + var(--y) * 36%);
+  translate: -50% -50%;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.center > * {
+  pointer-events: auto;
+}
+
+/* Led suit and last-hand winner sit centred just above the trump badge. */
+.corner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.hands,
+.led {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--panel-line);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+
+.led svg {
+  width: 12px;
+  height: 12px;
+}
+
+.led {
+  animation: ledIn 0.4s var(--ease-spring) backwards;
+}
+
+@keyframes ledIn {
+  from {
+    scale: 0.6;
+    opacity: 0;
+  }
+}
+
+/* The round summary and the final result sit over the whole board. */
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: grid;
+  place-items: center;
+  padding: 8px 0;
+  background: rgba(8, 5, 4, 0.72);
+  border-radius: 16px;
+  animation: dimIn 0.4s var(--ease-out) backwards;
+}
+
+@keyframes dimIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ----------------------------------------------------------------- mine */
+
+.mine {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 8px);
+}
+
+/* Trump sits centred just above your cards so it is always in view. */
+.trump {
+  display: flex;
+  justify-content: center;
+}
+
+.line {
+  position: relative;
+  z-index: 2;
+  min-height: 28px;
+  padding: 3px 16px;
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--text-dim);
+  transition:
+    color 0.3s,
+    background 0.3s;
+}
+
+.line[data-active="true"] {
+  color: var(--on-crema);
+  background: var(--crema);
+  animation: nudge 0.6s var(--ease-spring);
+}
+
+@keyframes nudge {
+  from {
+    scale: 0.85;
+  }
+}
+
+.me {
+  display: flex;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+.emptyHand {
+  min-height: 24px;
+}
+
+@media (max-height: 560px) and (orientation: landscape) {
+  .opp {
+    top: calc(50% + var(--y) * 32%);
+  }
+}

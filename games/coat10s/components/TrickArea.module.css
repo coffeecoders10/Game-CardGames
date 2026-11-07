@@ -1,0 +1,174 @@
+.trick {
+  --cw: clamp(38px, min(11vw, 9.5dvh), 78px);
+  position: relative;
+  width: calc(var(--cw) * 3.6);
+  height: calc(var(--cw) * 3.4);
+  max-width: 100%;
+}
+
+/* Faint trump emblem printed on the table */
+.mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--cw) * 2.3);
+  height: calc(var(--cw) * 2.3);
+  translate: -50% -50%;
+  color: var(--crema);
+  opacity: 0.09;
+  animation: stamp 0.9s var(--ease-out) backwards;
+  pointer-events: none;
+}
+
+.markRed {
+  color: #e0705f;
+}
+
+@keyframes stamp {
+  from {
+    scale: 1.8;
+    opacity: 0;
+    rotate: -12deg;
+  }
+}
+
+/* Each card rests towards the player who played it, and arrives from that player's side. */
+.slot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--cw);
+  margin: calc(var(--cw) * -0.7) 0 0 calc(var(--cw) * -0.5);
+  translate: calc(var(--cw) * var(--x) * 1.15) calc(var(--cw) * var(--y) * 0.8);
+  rotate: var(--tilt);
+  --fx: calc(var(--x) * min(34vw, 230px));
+  --fy: calc(var(--y) * 30dvh);
+  animation: toss 0.55s var(--ease-out) backwards;
+}
+
+/* The sweep only runs once the hand is complete, towards the player who took it. */
+.trick[data-done="true"] .slot {
+  --tx: calc(var(--wx) * min(34vw, 230px));
+  --ty: calc(var(--wy) * 30dvh);
+  animation:
+    toss 0.55s var(--ease-out) backwards,
+    sweep 0.55s cubic-bezier(0.5, 0, 0.9, 0.4) 1.55s forwards;
+}
+
+@keyframes toss {
+  from {
+    translate: var(--fx) var(--fy);
+    rotate: 40deg;
+    scale: 0.8;
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+}
+
+@keyframes sweep {
+  to {
+    translate: var(--tx) var(--ty);
+    rotate: 20deg;
+    scale: 0.5;
+    opacity: 0;
+  }
+}
+
+.slot[data-win="true"] .played {
+  animation: winPulse 0.9s var(--ease-spring) 0.5s both;
+}
+
+@keyframes winPulse {
+  to {
+    scale: 1.14;
+    box-shadow:
+      0 0 0 calc(var(--u) * 1.6) var(--crema),
+      0 0 calc(var(--u) * 9) calc(var(--u) * 3) rgba(226, 176, 114, 0.7),
+      0 calc(var(--u) * 3) calc(var(--u) * 5) rgba(0, 0, 0, 0.45);
+  }
+}
+
+/* Sparks radiating from the winning card */
+.burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+}
+
+.burst i {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  margin: -3px;
+  border-radius: 50%;
+  background: var(--crema);
+  box-shadow: 0 0 8px var(--crema);
+  opacity: 0;
+  animation: spark 0.9s var(--ease-out) calc(0.5s + var(--s)) forwards;
+}
+
+@keyframes spark {
+  0% {
+    opacity: 1;
+    transform: rotate(var(--a)) translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--a)) translateY(calc(var(--cw) * -0.95)) scale(0.2);
+  }
+}
+
+.award {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: var(--crema);
+  color: var(--on-crema);
+  font-family: var(--font-head);
+  font-size: 17px;
+  white-space: nowrap;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  animation:
+    awardIn 0.5s var(--ease-spring) 0.45s backwards,
+    awardOut 0.3s ease-in 1.7s forwards;
+  z-index: 20;
+}
+
+@keyframes awardIn {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+@keyframes awardOut {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Who played the card: seat label under it, in the team colour. */
+.who {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--cw) * -0.28);
+  translate: -50% 0;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #e2b072;
+  color: var(--on-crema);
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.who[data-team="1"] {
+  background: #7fb9b0;
+}

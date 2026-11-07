@@ -1,0 +1,585 @@
+/* ------------------------------------------------------- trump reveal */
+
+/* Stamped on the table for a moment each round, then it fades and the corner badge keeps the answer. */
+.reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  pointer-events: none;
+  color: var(--crema);
+  animation: revealOut 2.6s var(--ease-out) forwards;
+}
+
+.reveal[data-red="true"] {
+  color: #e0705f;
+}
+
+.revealSuit {
+  width: clamp(84px, 24vw, 140px);
+  height: clamp(84px, 24vw, 140px);
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.6));
+  animation: stampIn 0.9s var(--ease-spring) backwards;
+}
+
+.revealText {
+  padding: 5px 18px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--panel-line);
+  color: var(--text);
+  font-family: var(--font-head);
+  font-size: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  animation: stampIn 0.7s var(--ease-spring) 0.25s backwards;
+}
+
+@keyframes stampIn {
+  from {
+    opacity: 0;
+    scale: 2.4;
+    rotate: -14deg;
+  }
+}
+
+@keyframes revealOut {
+  0%,
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* ------------------------------------------------------- trump badge */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 8px;
+  border-radius: 14px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.05;
+  animation: badgeIn 0.7s var(--ease-spring) backwards;
+}
+
+.badge[data-red="true"] {
+  color: var(--red);
+}
+
+.badge svg {
+  width: 26px;
+  height: 26px;
+}
+
+.badge span {
+  display: flex;
+  flex-direction: column;
+}
+
+.badge small {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+@keyframes badgeIn {
+  from {
+    scale: 0.4;
+    opacity: 0;
+    rotate: -16deg;
+  }
+}
+
+/* --------------------------------------------------------- the sheets */
+
+.sheet {
+  width: min(94vw, 460px);
+  max-height: 100%;
+  overflow-y: auto;
+  padding-inline: 16px;
+}
+
+.headline {
+  margin-bottom: 4px;
+  font-family: var(--font-head);
+  font-size: 22px;
+  color: var(--crema);
+  animation: headlineIn 0.8s var(--ease-spring) 0.2s backwards;
+}
+
+@keyframes headlineIn {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+.sub {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  font-size: 13.5px;
+  color: var(--text-dim);
+}
+
+.sub svg {
+  width: 14px;
+  height: 14px;
+}
+
+.redSuit {
+  color: #e0705f;
+}
+
+.table {
+  display: grid;
+  gap: 5px;
+  text-align: left;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px 44px 44px 54px;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  animation: rowIn 0.45s var(--ease-out) calc(var(--i, 0) * 70ms + 100ms) backwards;
+}
+
+.row.live {
+  grid-template-columns: minmax(0, 1fr) 44px 44px 54px;
+}
+
+.row.head {
+  padding-block: 0;
+  background: none;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  animation: none;
+}
+
+.row.head span:not(:first-child) {
+  text-align: center;
+}
+
+/* A call that came off gets a green edge, so winners of the round stand out. */
+.row[data-exact="true"] {
+  background: rgba(143, 207, 158, 0.13);
+  box-shadow: inset 0 0 0 1px rgba(143, 207, 158, 0.4);
+}
+
+.row[data-lead="true"]:not([data-exact="true"]) {
+  background: rgba(226, 176, 114, 0.16);
+  box-shadow: inset 0 0 0 1px var(--crema-dim);
+}
+
+@keyframes rowIn {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.who small {
+  font-size: 11.5px;
+  color: var(--text-dim);
+}
+
+.row[data-exact="true"] .who small {
+  color: var(--good);
+}
+
+.row[data-lead="true"]:not([data-exact="true"]) .who small {
+  color: var(--crema);
+}
+
+.num {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.gain {
+  justify-self: center;
+  min-width: 36px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(235, 160, 98, 0.14);
+  color: var(--text-dim);
+  font-size: 12.5px;
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.row[data-exact="true"] .gain {
+  background: rgba(143, 207, 158, 0.22);
+  color: var(--good);
+}
+
+.total {
+  font-family: var(--font-head);
+  font-size: 22px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.next {
+  margin-top: 16px;
+}
+
+.hint {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.quit {
+  margin-top: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  background: none;
+  color: var(--text-dim);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.quit[data-danger="true"] {
+  color: var(--warn);
+}
+
+/* ------------------------------------------------------- final sheet */
+
+.final {
+  width: min(94vw, 480px);
+}
+
+.standings {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 14px;
+  padding: 0;
+  list-style: none;
+}
+
+.stand {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px 6px 6px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  text-align: left;
+  animation: rowIn 0.45s var(--ease-out) calc(var(--i) * 80ms + 250ms) backwards;
+}
+
+.stand[data-lead="true"] {
+  background: rgba(226, 176, 114, 0.18);
+  box-shadow: inset 0 0 0 1px var(--crema-dim);
+}
+
+.rank {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--crema);
+  color: var(--on-crema);
+  font-family: var(--font-head);
+  font-size: 16px;
+}
+
+.scroll {
+  max-height: 28dvh;
+  overflow: auto;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.rounds {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.rounds caption {
+  padding: 8px 0 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.rounds th,
+.rounds td {
+  padding: 5px 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.rounds thead th {
+  position: sticky;
+  top: 0;
+  background: #1d1613;
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.rounds tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rounds td {
+  color: var(--text-dim);
+}
+
+.rounds td[data-scored="true"] {
+  color: var(--good);
+  font-weight: 800;
+}
+
+.rounds tfoot th,
+.rounds tfoot td {
+  border-top: 1px solid var(--panel-line);
+  color: var(--crema);
+  font-family: var(--font-head);
+  font-weight: 400;
+  font-size: 16px;
+}
+
+/* =========================================================== Coat of 10s */
+
+.revealText small {
+  display: block;
+  margin-top: 1px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.unset {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px dashed rgba(240, 228, 210, 0.3);
+  box-shadow: none;
+  animation: none;
+}
+
+.qmark {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px dashed currentColor;
+  font-family: var(--font-head);
+  font-size: 16px;
+}
+
+.teams {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tcol {
+  --c: #e2b072;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 3px 0 var(--c);
+  animation: rowIn 0.45s var(--ease-out) calc(var(--i, 0) * 90ms + 100ms) backwards;
+}
+
+.tcol[data-team="1"] {
+  --c: #7fb9b0;
+}
+
+.tcol[data-better="true"] {
+  background: color-mix(in srgb, var(--c) 16%, transparent);
+  box-shadow:
+    inset 0 3px 0 var(--c),
+    inset 0 0 0 1px color-mix(in srgb, var(--c) 55%, transparent);
+}
+
+.tname {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.tbadge {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--c);
+  color: var(--on-crema);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.tstat {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.tstat b {
+  font-family: var(--font-head);
+  font-weight: 400;
+  font-size: 20px;
+  color: var(--text);
+}
+
+.verdict {
+  font-family: var(--font-head);
+  font-size: 19px;
+  color: var(--crema);
+}
+
+.coatLine {
+  margin-top: 2px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+
+.coatLine[data-coat="true"] {
+  color: var(--good);
+}
+
+.coatNow {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.coatNow b {
+  font-family: var(--font-head);
+  font-weight: 400;
+  font-size: 17px;
+  color: var(--text);
+}
+
+.nextBox {
+  --c: #e2b072;
+  display: grid;
+  gap: 2px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 3px solid var(--c);
+  text-align: left;
+}
+
+.nextBox[data-team="1"] {
+  --c: #7fb9b0;
+}
+
+.nextBox small {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.nextBox b {
+  font-size: 16px;
+  color: var(--c);
+}
+
+.nextBox p {
+  font-size: 13px;
+  color: var(--text);
+}
+
+.go {
+  margin-top: 14px;
+}
+
+.live {
+  display: grid;
+  gap: 10px;
+  text-align: center;
+}
+
+.liveTeams {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.liveTeams li {
+  display: grid;
+  gap: 2px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 3px solid #e2b072;
+}
+
+.liveTeams li[data-team="1"] {
+  border-left-color: #7fb9b0;
+}
+
+.liveTeams span {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.liveNums {
+  color: var(--text) !important;
+  font-weight: 700;
+}

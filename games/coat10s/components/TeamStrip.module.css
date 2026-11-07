@@ -1,0 +1,218 @@
+/* Team colours: Team A is crema, Team B a cool sage, so teams read apart without leaving the roast palette. */
+.strip {
+  --team-a: #e2b072;
+  --team-b: #7fb9b0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin: 14px 0 18px;
+}
+
+.team {
+  --c: var(--team-a);
+  min-width: 0;
+  display: grid;
+  gap: 14px;
+  padding: 16px 18px 16px 20px;
+  border-radius: 16px;
+  background: var(--panel);
+  border: 1px solid var(--panel-line);
+  box-shadow: inset 4px 0 0 var(--c);
+  animation: stripIn 0.5s var(--ease-out) backwards;
+}
+
+.team[data-team="1"] {
+  --c: var(--team-b);
+}
+
+.team[data-mine="true"] {
+  border-color: color-mix(in srgb, var(--c) 45%, transparent);
+}
+
+@keyframes stripIn {
+  from {
+    opacity: 0;
+    translate: 0 -8px;
+  }
+}
+
+.head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--c);
+  color: var(--on-crema);
+  font-family: var(--font-head);
+  font-size: 18px;
+}
+
+.title {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+  line-height: 1.2;
+}
+
+.title b {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.title small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12.5px;
+  color: var(--text-dim);
+}
+
+/* The coat count is the score that matters, so it is the biggest thing on the strip. */
+.coats {
+  display: grid;
+  justify-items: center;
+  line-height: 1;
+  gap: 3px;
+  min-width: 48px;
+}
+
+.coats b {
+  display: inline-block;
+  font-family: var(--font-head);
+  font-weight: 400;
+  font-size: 38px;
+  color: var(--text-dim);
+  animation: coatBump 0.7s var(--ease-spring);
+}
+
+.coats small {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.coats b {
+  color: var(--c);
+}
+
+.coats[data-zero="true"] b {
+  color: var(--text-dim);
+  opacity: 0.6;
+}
+
+@keyframes coatBump {
+  from {
+    scale: 1.9;
+  }
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--panel-line);
+}
+
+.hands {
+  font-size: 13px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.hands b {
+  display: inline-block;
+  font-family: var(--font-head);
+  font-weight: 400;
+  font-size: 22px;
+  color: var(--text);
+  animation: coatBump 0.5s var(--ease-spring);
+}
+
+/* ---------------------------------------------------------- the 10s */
+
+.tens {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.ten {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 42px;
+  border-radius: 6px;
+  border: 1px dashed rgba(240, 228, 210, 0.22);
+  color: rgba(240, 228, 210, 0.3);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  transition:
+    background 0.3s,
+    color 0.3s,
+    scale 0.3s var(--ease-spring);
+}
+
+.ten svg {
+  width: 15px;
+  height: 15px;
+}
+
+.ten[data-on="true"] {
+  border: 1px solid var(--paper-edge);
+  background: var(--paper);
+  color: var(--ink);
+  animation: tenIn 0.6s var(--ease-spring);
+}
+
+.ten[data-on="true"][data-red="true"] {
+  color: var(--red);
+}
+
+@keyframes tenIn {
+  from {
+    scale: 1.7;
+    rotate: -12deg;
+  }
+}
+
+.lg .ten {
+  width: 32px;
+  height: 44px;
+  font-size: 14px;
+}
+
+.lg .ten svg {
+  width: 17px;
+  height: 17px;
+}
+
+@media (max-width: 420px) {
+  .team {
+    gap: 12px;
+    padding: 14px 14px 14px 16px;
+  }
+  .ten {
+    width: 26px;
+    height: 38px;
+    font-size: 13px;
+  }
+  .coats b {
+    font-size: 32px;
+  }
+}

@@ -1,6 +1,6 @@
 # CC Card Games
 
-A hub of playing-card games for the browser. Currently: **5-3-2**, a three-player trick-taking game, **7-8**, a two-player one, **7 of Hearts**, for three to five, **Judgement**, for three to six, and **Steal the Jack**, for two to six. The shared look and feel, and how to add a game, are in [DESIGN.md](DESIGN.md).
+A hub of playing-card games for the browser. Currently: **5-3-2**, a three-player trick-taking game, **7-8**, a two-player one, **7 of Hearts**, for three to five, **Judgement**, for three to six, and **Steal the Jack**, for two to six, and **Coat of 10s**, a team game for four or six. The shared look and feel, and how to add a game, are in [DESIGN.md](DESIGN.md).
 
 Built with Next.js (App Router), plain CSS Modules, and the shared Socket.IO room service described in [docs/sop-socket.md](docs/sop-socket.md).
 
@@ -56,6 +56,15 @@ Two to six players, the 52-card deck without the Jack of Diamonds (51 cards, all
 3. The player being picked from can drag their cards into a new order or shuffle; the host resolves the pick by a random card id, so a rearrangement can never change which card was taken.
 4. Players with no cards are out and skipped. When one player still holds cards they lose the round (+1 loss); another round keeps the tally.
 
+## How Coat of 10s plays
+
+Four players (two teams of 2, 13 cards each) or six (two teams of 3, 2s removed, 8 cards each). Seats alternate between teams (A1 B1 A2 B2...) for the whole match.
+
+1. After everyone is seated the host arranges the teams and their A1/A2/... order, then deals. The first round's opener is random.
+2. Follow suit if you can; highest trump wins, else highest of the led suit. There is no trump at first: the first legal off-suit card of the round names trump, immediately.
+3. A team captures the 10s in every hand it wins. Capturing all four in a round earns a **coat**; coats are a net balance (an opposing coat cancels one).
+4. Next opener: a team holding coats, else the team with more 10s, else (on 2-2) more hands, else the previous opening team. Each team rotates its own starting player. The host can end the match between rounds.
+
 ## Code layout
 
 | Path | What it is |
@@ -64,7 +73,7 @@ Two to six players, the 52-card deck without the Jack of Diamonds (51 cards, all
 | `games/registry.tsx` | The list of games shown on the hub. Add an entry to add a tile. |
 | `games/532/game/` | Pure 5-3-2 rules (`engine.ts`), deck (`deck.ts`), and the per-player view projection (`view.ts`). No React, no networking. |
 | `games/532/net/`, `games/78/net/` | Each game's actions (`protocol.ts`) and its adapter (`table.ts`) that plugs its rules into the shared sessions. |
-| `games/78/`, `games/7hearts/`, `games/judgement/` | 7-8, 7 of Hearts and Judgement: same layout as 5-3-2 (`game/` rules and view, `net/`, `components/`). |
+| `games/78/`, `games/7hearts/`, `games/judgement/`, `games/coat10s/` | 7-8, 7 of Hearts, Judgement and Coat of 10s: same layout as 5-3-2 (`game/` rules and view, `net/`, `components/`). |
 | `lib/net/` | Shared multiplayer: `host.ts` and `guest.ts` sessions, `crypto.ts`, `room.ts` (Socket.IO transport), `wire.ts`, `storage.ts` and the `useTable` hook. |
 | `components/table/` | Shared table pieces: `TableShell`, `Seat`, `Lobby`, `TrumpPicker`, `GameHome`, `RoomClient`, `NameGate`. |
 | `games/532/components/` | The 5-3-2 table UI: `Table`, `Hand`, `Seat`, `TrickArea`, `Overlays`, `Lobby`, the landing page and rules. |
