@@ -1,14 +1,13 @@
 "use client";
 
-import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useMemo, useState } from "react";
 import { type Card, SUIT_NAMES, cardKey, isRed } from "@/lib/cards/cards";
 import { useMediaQuery } from "@/lib/hooks/useClientValue";
 import { SuitIcon } from "@/components/cards/Suit";
 import { Lobby } from "@/components/table/Lobby";
 import type { TableProps } from "@/components/table/RoomClient";
 import { TableShell, TrumpChip } from "@/components/table/TableShell";
-import { RulesDialog } from "@/components/ui/RulesDialog";
-import { MIN_PLAYERS, forbiddenJudgement, leaders, legalCards } from "@/games/judgement/game/engine";
+import { MIN_PLAYERS, forbiddenJudgement, legalCards } from "@/games/judgement/game/engine";
 import type { GameView, TableView } from "@/games/judgement/game/view";
 import type { GameAction } from "@/games/judgement/net/protocol";
 import { Hand } from "./Hand";
@@ -26,7 +25,6 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
   const game = view.game;
   const you = view.you;
   const touch = useMediaQuery("(pointer: coarse)");
-  const scoresRef = useRef<HTMLDialogElement>(null);
   const [selected, setSelected] = useState<string | null>(null);
 
   const live = !!game && !view.paused;
@@ -125,7 +123,6 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
   const led = game && game.trick.length > 0 && (game.step === "play" || game.step === "trickDone") ? game.trick[0].card.suit : null;
   const called = game ? game.judgements.reduce<number>((sum, j) => sum + (j ?? 0), 0) : 0;
   const judged = game ? game.judgements.filter((j) => j !== null).length : 0;
-  const top = game && game.history.length > 0 ? leaders(game.scores) : [];
 
   return (
     <TableShell
@@ -144,6 +141,7 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
       alert={alert}
       notice={notice}
       onLeave={onLeave}
+      scores={game && <ScoreList view={view} game={game} />}
     >
       <main className={styles.board}>
         {!game && (
@@ -183,15 +181,6 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
               )}
             </div>
 
-            <button type="button" className={styles.scores} onClick={() => scoresRef.current?.showModal()}>
-              <span>Scores</span>
-              {top.length > 0 && (
-                <small>
-                  {top.length > 1 ? "Tied" : nameOf(top[0])} · {game.scores[top[0]]}
-                </small>
-              )}
-            </button>
-
             <div className={styles.center}>
               {game.step === "judge" && (
                 <div className={styles.calls} key={game.round}>
@@ -223,10 +212,6 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
                 )}
               </div>
             )}
-
-            <RulesDialog dialogRef={scoresRef} id="scores-title" title={`Scores · Round ${game.round}`}>
-              <ScoreList view={view} game={game} />
-            </RulesDialog>
           </>
         )}
       </main>

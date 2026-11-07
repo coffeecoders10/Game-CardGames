@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { type Card, cardKey, cardName } from "@/lib/cards/cards";
 import { useMediaQuery } from "@/lib/hooks/useClientValue";
 import { Lobby } from "@/components/table/Lobby";
@@ -12,7 +12,6 @@ import type { GameView, TableView } from "@/games/7hearts/game/view";
 import type { GameAction } from "@/games/7hearts/net/protocol";
 import { Hand } from "./Hand";
 import { Layout } from "./Layout";
-import { RulesDialog } from "@/components/ui/RulesDialog";
 import { RoundSummary, ScoreList } from "./Overlays";
 import { Rules7Hearts } from "./Rules7Hearts";
 import styles from "./Table.module.css";
@@ -24,7 +23,6 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
   const you = view.you;
   const touch = useMediaQuery("(pointer: coarse)");
   const [selected, setSelected] = useState<string | null>(null);
-  const scoresRef = useRef<HTMLDialogElement>(null);
 
   const live = !!game && !view.paused;
   const playing = live && game.step === "play";
@@ -118,6 +116,7 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
       alert={alert}
       notice={notice}
       onLeave={onLeave}
+      scores={game && <ScoreList view={view} game={game} />}
     >
       <main className={styles.board}>
         <div className={styles.opponents}>{opponents.map((seat) => plate(seat, "top"))}</div>
@@ -145,11 +144,6 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
                   </p>
                 )}
                 {last && <p className={styles.last}>{last}</p>}
-                {mustPass && (
-                  <button type="button" className={styles.pass} disabled={busy} onClick={() => act({ type: "pass" })}>
-                    Pass
-                  </button>
-                )}
               </div>
             </>
           )}
@@ -163,16 +157,6 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
           </div>
         )}
 
-        {game && (
-          <>
-            <button type="button" className={styles.scores} onClick={() => scoresRef.current?.showModal()}>
-              Scores
-            </button>
-            <RulesDialog dialogRef={scoresRef} id="scores-title" title={`Scores · Round ${game.round} of ${ROUNDS}`}>
-              <ScoreList view={view} game={game} />
-            </RulesDialog>
-          </>
-        )}
       </main>
 
       <footer className={styles.mine}>
@@ -180,6 +164,11 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
           <Hand cards={game.hand} choosable={pickable} selected={active} onChoose={play} />
         ) : (
           <div className={styles.emptyHand} />
+        )}
+        {mustPass && (
+          <button type="button" className={styles.pass} disabled={busy} onClick={() => act({ type: "pass" })}>
+            Pass
+          </button>
         )}
       </footer>
     </TableShell>

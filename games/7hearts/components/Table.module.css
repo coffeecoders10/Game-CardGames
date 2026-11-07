@@ -74,6 +74,7 @@
 }
 
 .pass {
+  margin-top: 8px;
   min-height: 44px;
   padding: 0 28px;
   border: 0;
@@ -105,27 +106,6 @@
 .me {
   display: flex;
   justify-content: center;
-}
-
-/* Always-available leaderboard button, top right of the board. */
-.scores {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  z-index: 4;
-  min-height: 44px;
-  padding: 4px 14px;
-  border-radius: 14px;
-  border: 1px solid var(--panel-line);
-  background: var(--panel);
-  color: var(--text);
-  font-size: 13px;
-  font-weight: 700;
-  transition: border-color 0.2s;
-}
-
-.scores:hover {
-  border-color: var(--crema-dim);
 }
 
 /* The round summary sits over the whole board. */
