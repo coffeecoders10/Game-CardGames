@@ -10,6 +10,12 @@
   min-height: 0;
 }
 
+/* Two decks: eight lanes, so shrink the cards and tighten the gaps to fit the same width. */
+.layout[data-lanes="8"] {
+  --cw: clamp(20px, min(9vw, 3.6dvh), 44px);
+  gap: clamp(4px, 1.2vw, 14px);
+}
+
 .col {
   display: flex;
   flex-direction: column;

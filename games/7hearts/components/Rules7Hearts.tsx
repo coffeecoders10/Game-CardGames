@@ -3,11 +3,11 @@ export function Rules7Hearts() {
   return (
     <ol>
       <li>
-        <strong>Three to five players, seven rounds.</strong> Get rid of your cards first and keep your penalty points as
+        <strong>Three to ten players, seven rounds.</strong> Get rid of your cards first and keep your penalty points as
         low as you can. Lowest total after round seven wins.
       </li>
       <li>
-        <strong>The deal.</strong> The full 52-card deck is dealt out, as evenly as it will go. Nobody sees anyone
+        <strong>The deal.</strong> The full 52-card deck is dealt out, as evenly as it will go. With seven or more players two decks are shuffled together (104 cards) and the table has eight lines, two per suit. Nobody sees anyone
         else&apos;s cards, and there is no draw pile.
       </li>
       <li>

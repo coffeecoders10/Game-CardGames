@@ -21,7 +21,7 @@ export function Game7HeartsHome() {
       slug="7hearts"
       name="7 of Hearts"
       emblem={<Emblem7Hearts animated />}
-      tagline="Three to five players. Build every suit out from the seven, and be first to empty your hand."
+      tagline="Three to ten players. Build every suit out from the seven, and be first to empty your hand."
       fan={FAN}
       storage={storage7hearts}
     />

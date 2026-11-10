@@ -1,6 +1,6 @@
 # CC Card Games
 
-A hub of playing-card games for the browser. Currently: **5-3-2**, a three-player trick-taking game, **7-8**, a two-player one, **7 of Hearts**, for three to five, **Judgement**, for three to six, and **Steal the Jack**, for two to six, and **Coat of 10s**, a team game for four or six. The shared look and feel, and how to add a game, are in [DESIGN.md](DESIGN.md).
+A hub of playing-card games for the browser. Currently: **5-3-2**, a three-player trick-taking game, **7-8**, a two-player one, **7 of Hearts**, for three to ten (two decks from seven players), **Judgement**, for three to six, and **Steal the Jack**, for two to six, and **Coat of 10s**, a team game for four or six. The shared look and feel, and how to add a game, are in [DESIGN.md](DESIGN.md).
 
 Built with Next.js (App Router), plain CSS Modules, and the shared Socket.IO room service described in [docs/sop-socket.md](docs/sop-socket.md).
 

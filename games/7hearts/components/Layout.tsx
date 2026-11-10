@@ -2,11 +2,8 @@ import type { CSSProperties } from "react";
 import { type Card, type Rank, RANK_LABELS, SUIT_NAMES, type Suit, sameCard } from "@/lib/cards/cards";
 import { PlayingCard } from "@/components/cards/PlayingCard";
 import { SuitIcon } from "@/components/cards/Suit";
-import type { Board } from "@/games/7hearts/game/engine";
+import { type Board, laneSuit } from "@/games/7hearts/game/engine";
 import styles from "./Layout.module.css";
-
-/** Hearts first: the suit that opens every round. Alternates red and black across the table. */
-const COLUMNS: Suit[] = ["H", "S", "D", "C"];
 
 const rankOf = (value: number) => (value === 1 ? 14 : value) as Rank;
 
@@ -20,7 +17,7 @@ function Next({ suit, value, hot }: { suit: Suit; value: number; hot: boolean })
   );
 }
 
-function describe(suit: Suit, run: Board[Suit]) {
+function describe(suit: Suit, run: Board[number]) {
   if (!run) return `${SUIT_NAMES[suit]}: not started`;
   const label = (v: number) => RANK_LABELS[rankOf(v)];
   return `${SUIT_NAMES[suit]}: ${label(run.low)} to ${label(run.high)} on the table`;
@@ -34,12 +31,12 @@ interface Props {
   playable: readonly Card[];
 }
 
-/** The four suits as vertical columns, each growing out from its 7 upward (lower) and downward (higher). */
+/** One vertical column per lane (four, or eight with two decks), each growing out from its 7 upward (lower) and downward (higher). */
 export function Layout({ board, fresh, playable }: Props) {
   return (
-    <div className={styles.layout}>
-      {COLUMNS.map((suit) => {
-        const run = board[suit];
+    <div className={styles.layout} data-lanes={board.length}>
+      {board.map((run, lane) => {
+        const suit = laneSuit(lane);
         const cards: Card[] = [];
         if (run) for (let v = run.low; v <= run.high; v++) cards.push({ suit, rank: rankOf(v) });
         // A finished suit (A to K) folds into a tight pile with the Ace on top.
@@ -47,7 +44,7 @@ export function Layout({ board, fresh, playable }: Props) {
         if (complete) cards.reverse();
         const wants = (value: number) => playable.some((c) => sameCard(c, { suit, rank: rankOf(value) }));
         return (
-          <div key={suit} className={styles.col} role="group" aria-label={describe(suit, run)} data-red={suit === "H" || suit === "D"}>
+          <div key={lane} className={styles.col} role="group" aria-label={describe(suit, run)} data-red={suit === "H" || suit === "D"}>
             <span className={styles.tag} aria-hidden="true">
               <SuitIcon suit={suit} />
             </span>

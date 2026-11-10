@@ -1,16 +1,16 @@
-import { type Card, type RandomInt, SUITS, type Suit, sameCard, shuffle } from "@/lib/cards/cards";
+import { type Card, type RandomInt, type Suit, sameCard, shuffle } from "@/lib/cards/cards";
 import { fail } from "@/lib/cards/rules";
 import { buildDeck } from "./deck";
 
 /**
  * Authoritative 7 of Hearts rules. Everything here is pure: each action takes a Game and returns
- * a new Game, or throws a RuleError. Three to five seats play clockwise (seat order); the holder of
+ * a new Game, or throws a RuleError. Three to ten seats play clockwise (seat order), with a second deck (and eight lanes) from seven players; the holder of
  * the 7 of Hearts opens every round. Whoever empties their hand first ends the round; everyone
  * else scores the value of the cards they still hold. Lowest total after seven rounds wins.
  */
 
 export const MIN_PLAYERS = 3;
-export const MAX_PLAYERS = 5;
+export const MAX_PLAYERS = 10;
 export const ROUNDS = 7;
 
 export type Step = "play" | "summary";
@@ -26,7 +26,17 @@ export interface Run {
   low: number;
   high: number;
 }
-export type Board = Record<Suit, Run | null>;
+/**
+ * One lane per suit per deck: 4 lanes with one deck, 8 with two. Lane `i` holds suit `LANE_SUITS[i % 4]`.
+ * Duplicate cards are interchangeable, so a card goes on the first lane of its suit that accepts it.
+ */
+export type Board = (Run | null)[];
+
+export const LANE_SUITS: readonly Suit[] = ["H", "S", "D", "C"];
+export const laneSuit = (lane: number): Suit => LANE_SUITS[lane % LANE_SUITS.length];
+
+/** Seven or more players share two decks. */
+export const decksFor = (players: number) => (players > 6 ? 2 : 1);
 
 /** A card played, or a pass (`card: null`). `id` grows with every move so the UI can tell them apart. */
 export interface Move {
@@ -63,23 +73,29 @@ export interface Game {
 
 const OPENER: Card = { suit: "H", rank: 7 };
 
-const emptyBoard = (): Board => ({ S: null, H: null, D: null, C: null });
-export const isBoardEmpty = (board: Board) => SUITS.every((suit) => board[suit] === null);
+const emptyBoard = (players: number): Board => Array(LANE_SUITS.length * decksFor(players)).fill(null);
+export const isBoardEmpty = (board: Board) => board.every((run) => run === null);
+
+/** The lane a card would go on, or -1 if it fits nowhere. */
+export function laneFor(board: Board, card: Card): number {
+  if (isBoardEmpty(board)) return sameCard(card, OPENER) ? LANE_SUITS.indexOf(card.suit) : -1;
+  const value = valueOf(card);
+  return board.findIndex((run, i) => {
+    if (laneSuit(i) !== card.suit) return false;
+    return run ? value === run.low - 1 || value === run.high + 1 : value === 7;
+  });
+}
 
 /** Whether a card could go on the table right now, ignoring whose turn it is. */
-export function isPlayable(board: Board, card: Card): boolean {
-  if (isBoardEmpty(board)) return sameCard(card, OPENER);
-  const run = board[card.suit];
-  const value = valueOf(card);
-  return run ? value === run.low - 1 || value === run.high + 1 : value === 7;
-}
+export const isPlayable = (board: Board, card: Card): boolean => laneFor(board, card) >= 0;
 
 export const legalCards = (board: Board, hand: readonly Card[]): Card[] => hand.filter((c) => isPlayable(board, c));
 
 /** Cards are dealt round-robin; the seats that get the extra cards move along each round. */
 function dealHands(players: number, round: number, randomInt: RandomInt): Card[][] {
   const hands: Card[][] = Array.from({ length: players }, () => []);
-  shuffle(buildDeck(), randomInt).forEach((card, i) => hands[(i + round - 1) % players].push(card));
+  const cards = Array.from({ length: decksFor(players) }, buildDeck).flat();
+  shuffle(cards, randomInt).forEach((card, i) => hands[(i + round - 1) % players].push(card));
   return hands;
 }
 
@@ -90,7 +106,7 @@ function startRound(round: number, players: number, scores: number[], history: n
     round,
     players,
     hands,
-    board: emptyBoard(),
+    board: emptyBoard(players),
     turn: opener,
     step: "play",
     lastMove: null,
@@ -104,7 +120,7 @@ function startRound(round: number, players: number, scores: number[], history: n
 
 export function newGame(randomInt: RandomInt, players: number): Game {
   if (!Number.isInteger(players) || players < MIN_PLAYERS || players > MAX_PLAYERS) {
-    fail("7 of Hearts is played by three to five players.");
+    fail("7 of Hearts is played by three to ten players.");
   }
   return startRound(1, players, Array(players).fill(0), [], randomInt);
 }
@@ -123,11 +139,11 @@ export function playCard(g: Game, seat: number, card: Card): Game {
   }
 
   const value = valueOf(held);
-  const run = g.board[held.suit];
-  const board: Board = {
-    ...g.board,
-    [held.suit]: run ? { low: Math.min(run.low, value), high: Math.max(run.high, value) } : { low: value, high: value },
-  };
+  const lane = laneFor(g.board, held);
+  const run = g.board[lane];
+  const board: Board = g.board.map((r, i) =>
+    i !== lane ? r : run ? { low: Math.min(run.low, value), high: Math.max(run.high, value) } : { low: value, high: value },
+  );
   const hands = g.hands.map((h, i) => (i === seat ? h.filter((c) => !sameCard(c, held)) : h));
   const next: Game = {
     ...g,
