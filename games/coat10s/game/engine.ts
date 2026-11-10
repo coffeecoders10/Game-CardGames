@@ -5,12 +5,12 @@ import { buildDeck, handSizeFor, isTen } from "./deck";
 
 /**
  * Authoritative Coat of 10s rules. Everything here is pure: each action takes a Game and returns a new
- * Game, or throws a RuleError. Four or six players in two teams sit in alternating order (A1 B1 A2 B2 ...).
+ * Game, or throws a RuleError. Four, six or eight players in two teams sit in alternating order (A1 B1 A2 B2 ...).
  * A team that captures all four 10s in a round earns a coat; coats are a persistent net balance.
  * Seats are table seats (0 is the host); `order` is the fixed circular playing order.
  */
 
-export const PLAYER_COUNTS = [4, 6] as const;
+export const PLAYER_COUNTS = [4, 6, 8] as const;
 
 export type Team = 0 | 1;
 export type Step = "teams" | "play" | "trickDone" | "summary" | "final";
@@ -138,7 +138,7 @@ export function startingTeam(
 // ------------------------------------------------------------------ set-up
 
 export function newGame(_randomInt: RandomInt, players: number): Game {
-  if (!(PLAYER_COUNTS as readonly number[]).includes(players)) fail("Coat of 10s is played by four or six players.");
+  if (!(PLAYER_COUNTS as readonly number[]).includes(players)) fail("Coat of 10s is played by four, six or eight players.");
   const seats = Array.from({ length: players }, (_, i) => i);
   return {
     players,

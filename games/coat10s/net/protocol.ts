@@ -11,7 +11,7 @@ export type GameAction =
 
 export type Action = GameAction | CommonAction;
 
-const isSeat = (v: unknown): v is number => typeof v === "number" && Number.isInteger(v) && v >= 0 && v < 6;
+const isSeat = (v: unknown): v is number => typeof v === "number" && Number.isInteger(v) && v >= 0 && v < 8;
 
 export function parseGameAction(a: Record<string, unknown>): GameAction | null {
   switch (a.type) {

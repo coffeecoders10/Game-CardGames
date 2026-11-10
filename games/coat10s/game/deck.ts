@@ -1,13 +1,13 @@
 import { type Card, type Rank, SUITS } from "@/lib/cards/cards";
 
 /**
- * The deck for a table: all 52 cards for four players; for six the four 2s come out so the 48 left
- * deal out evenly (8 each).
+ * The deck for a table: all 52 cards for four players; for six or eight the four 2s come out so the 48 left
+ * deal out evenly (8 or 6 each).
  */
 export function buildDeck(players: number): Card[] {
   const deck: Card[] = [];
   for (const suit of SUITS) {
-    for (let rank = players === 6 ? 3 : 2; rank <= 14; rank++) deck.push({ suit, rank: rank as Rank });
+    for (let rank = players >= 6 ? 3 : 2; rank <= 14; rank++) deck.push({ suit, rank: rank as Rank });
   }
   return deck;
 }

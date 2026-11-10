@@ -15,10 +15,10 @@ export const adapterCoat10s: TableAdapter<Game, GameView, GameAction> = {
   roomId: roomIdFor,
   storage: storageCoat10s,
   engine: {
-    seats: 6,
+    seats: 8,
     minSeats: 4,
     allowedSeats: PLAYER_COUNTS,
-    startError: "Coat of 10s needs exactly four or six players.",
+    startError: "Coat of 10s needs exactly four, six or eight players.",
     newGame,
     act(game, seat, action, randomInt) {
       switch (action.type) {

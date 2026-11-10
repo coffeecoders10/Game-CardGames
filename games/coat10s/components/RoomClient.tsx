@@ -13,7 +13,7 @@ export function RoomClient({ code }: { code: string }) {
       storage={storageCoat10s}
       useTable={useTable}
       Table={Table}
-      fullText="All six seats are already taken."
+      fullText="All eight seats are already taken."
     />
   );
 }

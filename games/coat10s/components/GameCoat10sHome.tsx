@@ -20,7 +20,7 @@ export function GameCoat10sHome() {
       slug="coat10s"
       name="Coat of 10s"
       emblem={<EmblemCoat10s animated />}
-      tagline="Four or six players in two teams. Capture all four 10s to win a coat."
+      tagline="Four, six or eight players in two teams. Capture all four 10s to win a coat."
       fan={FAN}
       storage={storageCoat10s}
     />

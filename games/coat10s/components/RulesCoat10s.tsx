@@ -3,12 +3,12 @@ export function RulesCoat10s() {
   return (
     <ol>
       <li>
-        <strong>Four or six players, two teams.</strong> The host splits the table into Team A and Team B (2 v 2 or 3 v 3).
+        <strong>Four, six or eight players, two teams.</strong> The host splits the table into Team A and Team B (2 v 2, 3 v 3 or 4 v 4).
         Seats alternate between teams all the way round (A1, B1, A2, B2…), and that order never changes.
       </li>
       <li>
-        <strong>The deal.</strong> With four players the full 52-card deck is dealt, 13 each. With six, the four 2s are
-        removed and everyone gets 8. Ace is high.
+        <strong>The deal.</strong> With four players the full 52-card deck is dealt, 13 each. With six or eight, the four 2s are
+        removed and everyone gets 8 (six players) or 6 (eight players). Ace is high.
       </li>
       <li>
         <strong>Playing a hand.</strong> The leader plays any card; its suit is the led suit. Everyone after them in the

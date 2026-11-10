@@ -89,7 +89,7 @@ export const GAMES: GameInfo[] = [
     slug: "coat10s",
     title: "Coat of 10s",
     tagline: "Two teams, one goal: capture all four 10s and win a coat.",
-    facts: ["4 or 6 players", "Teams", "Online"],
+    facts: ["4, 6 or 8 players", "Teams", "Online"],
     emblem: <EmblemCoat10s size="clamp(52px, 14vw, 68px)" />,
     cards: [
       { suit: "S", rank: 10 },

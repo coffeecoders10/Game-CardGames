@@ -171,8 +171,8 @@ export function Table({ view, status, notice, busy, isHost, act, onLeave }: Tabl
                       ? `${seated} players here. Next, you'll split them into two teams of ${seated / 2}.`
                       : `${seated} players here. Waiting for the host to choose teams.`
                     : seated < 4
-                      ? `${seated} of 4–6 players seated. Coat of 10s needs exactly 4 or 6; send the code to ${4 - seated === 1 ? "one more friend" : "more friends"}.`
-                      : `${seated} players seated. Coat of 10s needs exactly 4 or 6, so wait for one more (or someone to step out).`
+                      ? `${seated} of 4–8 players seated. Coat of 10s needs 4, 6 or 8; send the code to ${4 - seated === 1 ? "one more friend" : "more friends"}.`
+                      : `${seated} players seated. Coat of 10s needs 4, 6 or 8, so wait for one more (or someone to step out).`
                 }
                 startLabel="Choose teams"
                 disabled={busy || view.paused || !countOk}
